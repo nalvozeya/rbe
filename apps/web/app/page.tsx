@@ -3,6 +3,8 @@ import { SearchButton } from "@/components/search-button"
 import {
   Archive,
   ChevronDown,
+  Ellipsis,
+  Filter,
   Flag,
   Forward,
   FolderInput,
@@ -19,6 +21,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@workspace/ui/components/resizable"
+import { Separator } from "@workspace/ui/components/separator"
 import {
   SidebarInset,
   SidebarProvider,
@@ -33,14 +36,35 @@ export default function Page() {
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />
           <div className="ms-auto flex items-center gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              aria-label="Compose email"
-            >
-              <SquarePen aria-hidden="true" />
-            </Button>
+            <div className="flex h-5 items-center gap-4">
+              <ButtonGroup aria-label="Inbox controls">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  aria-label="Filter inbox"
+                >
+                  <Filter aria-hidden="true" />
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  aria-label="More inbox actions"
+                >
+                  <Ellipsis aria-hidden="true" />
+                </Button>
+              </ButtonGroup>
+              <Separator orientation="vertical" />
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                aria-label="Compose email"
+              >
+                <SquarePen aria-hidden="true" />
+              </Button>
+            </div>
             <ButtonGroup aria-label="Reply actions">
               <Button
                 type="button"
