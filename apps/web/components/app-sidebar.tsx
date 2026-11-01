@@ -13,6 +13,7 @@ import {
   Tag,
   Trash2,
   TriangleAlert,
+  type LucideIcon,
 } from "lucide-react"
 
 import {
@@ -30,12 +31,28 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuAction,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarRail,
 } from "@workspace/ui/components/sidebar"
 
-const folders = [
-  { label: "Inbox", icon: Inbox, href: "#inbox", active: true },
+const sampleUnreadCount = 5
+
+const folders: {
+  label: string
+  icon: LucideIcon
+  href: string
+  active?: boolean
+  unreadCount?: number
+}[] = [
+  {
+    label: "Inbox",
+    icon: Inbox,
+    href: "#inbox",
+    active: true,
+    unreadCount: sampleUnreadCount,
+  },
   { label: "Starred", icon: Star, href: "#starred" },
   { label: "Snoozed", icon: Clock3, href: "#snoozed" },
   { label: "Sent", icon: Send, href: "#sent" },
@@ -56,23 +73,35 @@ export function AppSidebar() {
           <SidebarGroupLabel>Mail</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {folders.map(({ label, icon: Icon, href, active }) => (
-                <SidebarMenuItem key={label}>
-                  <SidebarMenuButton
-                    render={
-                      <a
-                        href={href}
-                        aria-current={active ? "page" : undefined}
-                      />
-                    }
-                    isActive={active}
-                    tooltip={label}
-                  >
-                    <Icon />
-                    <span>{label}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {folders.map(
+                ({ label, icon: Icon, href, active, unreadCount }) => (
+                  <SidebarMenuItem key={label}>
+                    <SidebarMenuButton
+                      render={
+                        <a
+                          href={href}
+                          aria-current={active ? "page" : undefined}
+                        />
+                      }
+                      isActive={active}
+                      aria-label={
+                        unreadCount ? `${label}, ${unreadCount} unread` : label
+                      }
+                      tooltip={
+                        unreadCount ? `${label}, ${unreadCount} unread` : label
+                      }
+                    >
+                      <Icon />
+                      <span>{label}</span>
+                    </SidebarMenuButton>
+                    {unreadCount ? (
+                      <SidebarMenuBadge aria-hidden="true">
+                        {unreadCount}
+                      </SidebarMenuBadge>
+                    ) : null}
+                  </SidebarMenuItem>
+                )
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -83,9 +112,7 @@ export function AppSidebar() {
               {customFolders.map((folder) => (
                 <SidebarMenuItem key={folder}>
                   <SidebarMenuButton
-                    render={
-                      <a href={`#folder-${folder.toLowerCase()}`} />
-                    }
+                    render={<a href={`#folder-${folder.toLowerCase()}`} />}
                     tooltip={folder}
                   >
                     <Folder />
@@ -106,7 +133,7 @@ export function AppSidebar() {
                       <DropdownMenuGroup>
                         <DropdownMenuItem>
                           <Pencil />
-                          Rename
+                          Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem variant="destructive">
                           <Trash2 />
@@ -148,7 +175,7 @@ export function AppSidebar() {
                       <DropdownMenuGroup>
                         <DropdownMenuItem>
                           <Pencil />
-                          Rename
+                          Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem variant="destructive">
                           <Trash2 />
@@ -163,6 +190,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarRail />
     </Sidebar>
   )
 }
